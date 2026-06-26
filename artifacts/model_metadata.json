@@ -1,0 +1,73 @@
+{
+  "dataset": "Customer Churn.csv",
+  "target": "churn",
+  "raw_feature_columns": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "age",
+    "customer_value"
+  ],
+  "model_feature_columns": [
+    "call_failure",
+    "complains",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age_group",
+    "tariff_plan",
+    "status",
+    "age",
+    "customer_value",
+    "usage_minutes",
+    "failed_call_rate",
+    "sms_share",
+    "value_per_usage_minute",
+    "value_per_frequency",
+    "calls_per_distinct_number"
+  ],
+  "categorical_features": [
+    "complains",
+    "age_group",
+    "tariff_plan",
+    "status"
+  ],
+  "numeric_features": [
+    "call_failure",
+    "subscription_length",
+    "charge_amount",
+    "seconds_of_use",
+    "frequency_of_use",
+    "frequency_of_sms",
+    "distinct_called_numbers",
+    "age",
+    "customer_value",
+    "usage_minutes",
+    "failed_call_rate",
+    "sms_share",
+    "value_per_usage_minute",
+    "value_per_frequency",
+    "calls_per_distinct_number"
+  ],
+  "best_model": "random_forest",
+  "threshold": 0.48215135924114494,
+  "test_metrics": {
+    "accuracy": 0.9631578947368421,
+    "precision": 0.9047619047619048,
+    "recall": 0.8539325842696629,
+    "f1": 0.8786127167630058,
+    "roc_auc": 0.9840570907986638,
+    "pr_auc": 0.9048070654177176
+  }
+}

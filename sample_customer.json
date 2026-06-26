@@ -1,0 +1,17 @@
+{
+  "email": "johndoe@gatglobal.co.kr",
+  "nama": "John Doe",
+  "call_failure": 12,
+  "complains": 1,
+  "subscription_length": 38,
+  "charge_amount": 0,
+  "seconds_of_use": 4370,
+  "frequency_of_use": 71,
+  "frequency_of_sms": 5,
+  "distinct_called_numbers": 17,
+  "age_group": 3,
+  "tariff_plan": 1,
+  "status": 1,
+  "age": 30,
+  "customer_value": 197.64
+}
