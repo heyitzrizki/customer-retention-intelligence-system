@@ -20,7 +20,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
-from feature_engineering import MODEL_FEATURE_COLUMNS, RAW_FEATURE_COLUMNS, TARGET_COLUMN, prepare_training_frame
+from feature_engineering import (
+    MODEL_FEATURE_COLUMNS,
+    RAW_FEATURE_COLUMNS,
+    TARGET_COLUMN,
+    prepare_training_frame,
+)
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
@@ -43,7 +48,14 @@ def available_models() -> dict:
         "logistic_regression": Pipeline(
             steps=[
                 ("scaler", StandardScaler()),
-                ("model", LogisticRegression(max_iter=2000, class_weight="balanced", random_state=42)),
+                (
+                    "model",
+                    LogisticRegression(
+                        max_iter=2000,
+                        class_weight="balanced",
+                        random_state=42,
+                    ),
+                ),
             ]
         ),
         "random_forest": RandomForestClassifier(
@@ -178,7 +190,11 @@ def main() -> None:
         "raw_feature_columns": RAW_FEATURE_COLUMNS,
         "model_feature_columns": MODEL_FEATURE_COLUMNS,
         "categorical_features": ["complains", "age_group", "tariff_plan", "status"],
-        "numeric_features": [column for column in MODEL_FEATURE_COLUMNS if column not in ["complains", "age_group", "tariff_plan", "status"]],
+        "numeric_features": [
+            column
+            for column in MODEL_FEATURE_COLUMNS
+            if column not in ["complains", "age_group", "tariff_plan", "status"]
+        ],
         "threshold": best_threshold,
         "selected_threshold": best_threshold,
         "customer_value_quantile_thresholds": value_thresholds,

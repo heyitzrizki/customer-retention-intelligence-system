@@ -1,18 +1,17 @@
-# n8n Automation Notes
+# n8n Notes
 
-This project keeps the root `predict.py` entry point for existing n8n workflows and also provides `automation/predict.py` for the organized portfolio structure.
+Use the root `predict.py` script from an Execute Command node. `automation/predict.py` is just a thin wrapper for people who prefer keeping automation entry points in one folder.
 
-Example Execute Command node:
+Example command:
 
 ```bash
-python /path/to/Customer-Churn-Automation/predict.py --json '{{ JSON.stringify($json) }}'
+python /workspace/customer-retention-intelligence-system/predict.py --json '{{ JSON.stringify($json) }}'
 ```
 
-The command returns valid JSON with the original prediction fields plus business-ready fields that can be mapped into Telegram and HubSpot:
+The script prints one JSON object to stdout. The main fields to map in later n8n nodes are:
 
 - `churn_probability`
 - `churn_prediction`
-- `threshold`
 - `risk_level`
 - `customer_value_tier`
 - `retention_priority_score`
@@ -20,4 +19,10 @@ The command returns valid JSON with the original prediction fields plus business
 - `recommended_action`
 - `priority`
 
-Extra fields such as `customer_id`, `email`, `name`, `nama`, and `phone` are preserved in the output when present.
+Optional customer fields such as `customer_id`, `email`, `name`, `nama`, and `phone` are copied back into the output when they exist in the input payload.
+
+Sample local test:
+
+```bash
+python predict.py --input sample_customer.json
+```

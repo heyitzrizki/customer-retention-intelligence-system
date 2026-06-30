@@ -55,11 +55,15 @@ def clean_dataframe_columns(data: pd.DataFrame) -> pd.DataFrame:
 def ensure_customer_id(data: pd.DataFrame) -> pd.DataFrame:
     data = data.copy()
     if "customer_id" not in data.columns:
-        data.insert(0, "customer_id", [f"CUST_{index:04d}" for index in range(1, len(data) + 1)])
+        customer_ids = [f"CUST_{index:04d}" for index in range(1, len(data) + 1)]
+        data.insert(0, "customer_id", customer_ids)
     return data
 
 
-def coerce_raw_features(data: pd.DataFrame, required_columns: Optional[list[str]] = None) -> pd.DataFrame:
+def coerce_raw_features(
+    data: pd.DataFrame,
+    required_columns: Optional[list[str]] = None,
+) -> pd.DataFrame:
     data = clean_dataframe_columns(data)
     required_columns = required_columns or RAW_FEATURE_COLUMNS
     missing_columns = [column for column in required_columns if column not in data.columns]
@@ -130,7 +134,12 @@ def add_engineered_features(
     complaint_penalty = np.where(data["complains"] > 0, 0.25, 0)
 
     data["engagement_score"] = (
-        (0.35 * usage_component + 0.30 * duration_component + 0.20 * sms_component + 0.15 * subscription_component)
+        (
+            0.35 * usage_component
+            + 0.30 * duration_component
+            + 0.20 * sms_component
+            + 0.15 * subscription_component
+        )
         - complaint_penalty
     ).clip(0, 1) * 100
     data["usage_intensity"] = (
@@ -146,7 +155,9 @@ def prepare_model_features(data: pd.DataFrame, metadata: dict) -> pd.DataFrame:
     model_feature_columns = metadata.get("model_feature_columns", MODEL_FEATURE_COLUMNS)
     missing_columns = [column for column in model_feature_columns if column not in data.columns]
     if missing_columns:
-        raise ValueError(f"Missing model feature columns after feature engineering: {missing_columns}")
+        raise ValueError(
+            f"Missing model feature columns after feature engineering: {missing_columns}"
+        )
     return data[model_feature_columns]
 
 

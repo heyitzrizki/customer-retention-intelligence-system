@@ -136,8 +136,12 @@ def main() -> None:
 
     label_map = build_segment_profiles(data)
     data["segment"] = data["segment_id"].map(lambda value: label_map[int(value)]["segment"])
-    data["segment_description"] = data["segment_id"].map(lambda value: label_map[int(value)]["segment_description"])
-    data["suggested_strategy"] = data["segment_id"].map(lambda value: label_map[int(value)]["suggested_strategy"])
+    data["segment_description"] = data["segment_id"].map(
+        lambda value: label_map[int(value)]["segment_description"]
+    )
+    data["suggested_strategy"] = data["segment_id"].map(
+        lambda value: label_map[int(value)]["suggested_strategy"]
+    )
 
     output_columns = [
         "customer_id",

@@ -20,12 +20,19 @@ def priority_from_score(score: float) -> str:
     return "P4"
 
 
-def _value_score(customer_value: float, thresholds: dict | None = None, tier: str | None = None) -> float:
+def _value_score(
+    customer_value: float,
+    thresholds: dict | None = None,
+    tier: str | None = None,
+) -> float:
     thresholds = thresholds or {}
     min_value = thresholds.get("min")
     max_value = thresholds.get("max")
     if min_value is not None and max_value is not None and float(max_value) > float(min_value):
-        return float(np.clip((customer_value - float(min_value)) / (float(max_value) - float(min_value)) * 100, 0, 100))
+        scaled_value = (customer_value - float(min_value)) / (
+            float(max_value) - float(min_value)
+        )
+        return float(np.clip(scaled_value * 100, 0, 100))
 
     tier_scores = {"Low": 30, "Medium": 65, "High": 100}
     return float(tier_scores.get(str(tier), 50))
@@ -68,7 +75,10 @@ def recommended_retention_action(row: pd.Series, metadata: dict | None = None) -
 
     risk_level = row.get("risk_level", "Low")
     value_tier = row.get("customer_value_tier", "Medium")
-    has_service_issue = float(row.get("complains", 0)) >= 1 or float(row.get("failed_call_rate", 0)) >= failed_call_rate_high
+    has_service_issue = (
+        float(row.get("complains", 0)) >= 1
+        or float(row.get("failed_call_rate", 0)) >= failed_call_rate_high
+    )
 
     if risk_level == "High" and value_tier == "High":
         if has_service_issue:
@@ -94,7 +104,13 @@ def recommended_retention_action(row: pd.Series, metadata: dict | None = None) -
 
 def add_retention_recommendations(data: pd.DataFrame, metadata: dict | None = None) -> pd.DataFrame:
     data = data.copy()
-    data["retention_priority_score"] = data.apply(lambda row: retention_priority_score(row, metadata), axis=1)
+    data["retention_priority_score"] = data.apply(
+        lambda row: retention_priority_score(row, metadata),
+        axis=1,
+    )
     data["priority"] = data["retention_priority_score"].apply(priority_from_score)
-    data["recommended_action"] = data.apply(lambda row: recommended_retention_action(row, metadata), axis=1)
+    data["recommended_action"] = data.apply(
+        lambda row: recommended_retention_action(row, metadata),
+        axis=1,
+    )
     return data

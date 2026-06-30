@@ -14,7 +14,11 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 from explain_risk import explain_customer_risk
-from feature_engineering import add_engineered_features, clean_dataframe_columns, prepare_model_features
+from feature_engineering import (
+    add_engineered_features,
+    clean_dataframe_columns,
+    prepare_model_features,
+)
 from recommend_actions import (
     priority_from_score,
     recommended_retention_action,
@@ -57,7 +61,8 @@ def payload_to_frame(payload):
     data = pd.DataFrame(records)
     data = clean_dataframe_columns(data)
     if "customer_id" not in data.columns:
-        data.insert(0, "customer_id", [f"CUST_{index:03d}" for index in range(1, len(data) + 1)])
+        customer_ids = [f"CUST_{index:03d}" for index in range(1, len(data) + 1)]
+        data.insert(0, "customer_id", customer_ids)
     return data
 
 
@@ -81,9 +86,10 @@ def prediction_record(row_number, row, probability, prediction, threshold, metad
     business_row["priority"] = priority_from_score(score)
     business_row["recommended_action"] = recommended_retention_action(business_row, metadata)
 
+    customer_id = row.get("customer_id", f"CUST_{row_number:03d}")
     result = {
         "row": row_number,
-        "customer_id": str(row.get("customer_id", f"CUST_{row_number:03d}")),
+        "customer_id": str(customer_id),
         "churn_probability": to_python_value(round(float(probability), 6)),
         "churn_prediction": to_python_value(int(prediction)),
         "threshold": threshold,
@@ -117,7 +123,7 @@ def predict(payload, model_path=DEFAULT_MODEL_PATH, metadata_path=DEFAULT_METADA
     predictions = (probabilities >= threshold).astype(int)
 
     results = []
-    for row_number, (index, row) in enumerate(business_data.iterrows(), start=1):
+    for row_number, (_, row) in enumerate(business_data.iterrows(), start=1):
         results.append(
             prediction_record(
                 row_number=row_number,
