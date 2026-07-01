@@ -10,6 +10,23 @@ This project turns the Iranian telecom churn dataset into a small retention work
 
 The repo keeps the notebook and raw dataset for traceability, but the main flow is handled by the Python scripts under `src/` and the n8n-friendly entry point in `predict.py`.
 
+## Dataset Source
+
+The dataset used in this project is the Iranian Churn dataset from the UCI Machine Learning Repository:
+
+```text
+https://archive.ics.uci.edu/dataset/563/iranian+churn+dataset
+```
+
+UCI citation:
+
+```text
+Iranian Churn [Dataset]. (2020). UCI Machine Learning Repository.
+https://doi.org/10.24432/C5JW3Z
+```
+
+The dataset contains 3,150 customer records and 13 input features from an Iranian telecom company. UCI lists the license as Creative Commons Attribution 4.0 International (CC BY 4.0).
+
 ## Repository Layout
 
 ```text
