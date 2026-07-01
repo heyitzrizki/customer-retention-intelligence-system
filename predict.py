@@ -101,7 +101,16 @@ def prediction_record(row_number, row, probability, prediction, threshold, metad
         "priority": business_row["priority"],
     }
 
-    for optional_field in ["email", "name", "nama", "phone"]:
+    optional_fields = [
+        "email",
+        "name",
+        "nama",
+        "phone",
+        "segment",
+        "segment_description",
+        "suggested_strategy",
+    ]
+    for optional_field in optional_fields:
         if optional_field in row and pd.notna(row[optional_field]):
             result[optional_field] = to_python_value(row[optional_field])
     return result
